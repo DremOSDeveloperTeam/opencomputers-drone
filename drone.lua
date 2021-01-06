@@ -57,7 +57,7 @@ while true do
     if cmd == "gmv" then -- Get Max Velocity
       t.send(d.name(),"gmv",d.getMaxVelocity())
     end
-    if cmd == "gac" then - Get ACceleration
+    if cmd == "gac" then -- Get ACceleration
       t.send(d.name(),"ga",d.getAcceleration())
     end
     if cmd == "sac" then -- Set ACceleration
