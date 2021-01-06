@@ -51,7 +51,7 @@ while true do
     if cmd == "gos" then -- Get OffSet
       t.send(d.name(),"gos",d.getOffset())
     end
-    if cmd == "gve" then - Get VElocity
+    if cmd == "gve" then -- Get VElocity
       t.send(d.name(),"gv",d.getVelocity())
     end
     if cmd == "gmv" then -- Get Max Velocity
