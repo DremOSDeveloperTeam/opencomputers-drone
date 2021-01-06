@@ -13,8 +13,12 @@ local commport = 6500
 t.open(6500)
 
 while true do
+  d.setLightColor(0x0000FF)
   local evt,_,sender,port,_,name,cmd,a,b,c = computer.pullSignal()
+  computer.beep() -- Debug
+  d.setLightColor(0xFFFFFF)
   if evt == "modem_message" and name == d.name() then
+    d.setLightColor(0xFF00FF)
     if cmd == "gfw" then -- Get Firmware Version
       t.broadcast(commport, fwv)
     end
@@ -27,7 +31,6 @@ while true do
       t.broadcast(commport, "  Downloading new firmware...")
       local full_response = ""
       while true do
-        --status "Processing"
         local chunk = web_request.read()
         if chunk then
           str.gsub(chunk, "\r\n", "\n")
