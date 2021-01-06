@@ -1,11 +1,14 @@
 -- Based off https://oc.cil.li/topic/1570-drone-controll-bios/
--- Modified by enthusiasticGeek to give the drone inventory capabilities, as well as the ability to update itself without disassembly*.
--- * Did not actually add that
+-- Modified by enthusiasticGeek to give the drone inventory capabilities, as well as the ability to update itself without disassembly.
 -- Version 0.01
 
 local fwv = "0.01"
 local d = component.proxy(component.list("drone")())
 local t = component.proxy(component.list("tunnel")())
+local eeprom = part "eeprom"
+local interweb = part "internet"
+local fwaddress = "https://raw.githubusercontent.com/osmarks/oc-drone/master/drone.lua"
+
 while true do
   local evt,_,sender,_,_,name,cmd,a,b,c = computer.pullSignal()
   if evt == "modem_message" and name == d.name() then
@@ -13,7 +16,28 @@ while true do
       t.send(fwv)
     end
     if cmd == "ufw" then -- Update Firmware
-      t.send("Coming soon(TM)")
+      local web_request = interweb.request(fwaddress)
+      t.send("Updating firmware...")
+      t.send("  Connecting...")
+      web_request.finishConnect()
+      t.send("  Connected!")
+      t.send("  Downloading new firmware...")
+      local full_response = ""
+      while true do
+        status "Processing"
+        local chunk = web_request.read()
+        if chunk then
+          str.gsub(chunk, "\r\n", "\n")
+          full_response = full_response .. chunk
+        else
+          break
+        end
+      end
+      t.send("  Firmware file downloaded!")
+      t.send("  Flashing new firmware...")
+      eeprom.set(full_response)
+      t.send("  Done flashing firmware!")
+      t.send("Update process done! Please reboot the drone for changes to take effect.")
     end
     if cmd == "gst" then -- Get Status Text
       t.send(d.name(),"gst",d.getStatusText())
