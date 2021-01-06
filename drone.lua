@@ -10,6 +10,8 @@ local interweb = part "internet"
 local fwaddress = "https://raw.githubusercontent.com/DremOSDeveloperTeam/opencomputers-drone/master/drone.lua"
 local commport = 6500
 
+t.open(6500)
+
 while true do
   local evt,_,sender,port,_,name,cmd,a,b,c = computer.pullSignal()
   if evt == "modem_message" and name == d.name() then
