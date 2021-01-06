@@ -7,14 +7,13 @@ local d = component.proxy(component.list("drone")())
 local t = component.proxy(component.list("modem")())
 local eeprom = component.proxy(component.list("eeprom")())
 local interweb = component.proxy(component.list("internet")())
-local event = require("event")
 local fwaddress = "https://raw.githubusercontent.com/DremOSDeveloperTeam/opencomputers-drone/master/drone.lua"
 local commport = 6500
 
 t.open(6500)
 
 while true do
-  local evt,_,sender,port,_,name,cmd,a,b,c = event.pull("modem_message")
+  local evt,_,sender,port,_,name,cmd,a,b,c = computer.pullSignal()
   if evt == "modem_message" and name == d.name() then
     if cmd == "gfw" then -- Get Firmware Version
       t.broadcast(commport, fwv)
