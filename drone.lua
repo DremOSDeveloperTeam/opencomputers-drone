@@ -7,7 +7,7 @@ local d = component.proxy(component.list("drone")())
 local t = component.proxy(component.list("tunnel")())
 local eeprom = part "eeprom"
 local interweb = part "internet"
-local fwaddress = "https://raw.githubusercontent.com/osmarks/oc-drone/master/drone.lua"
+local fwaddress = "https://raw.githubusercontent.com/DremOSDeveloperTeam/opencomputers-drone/master/drone.lua"
 
 while true do
   local evt,_,sender,_,_,name,cmd,a,b,c = computer.pullSignal()
@@ -15,7 +15,7 @@ while true do
     if cmd == "gfw" then -- Get Firmware Version
       t.send(fwv)
     end
-    if cmd == "ufw" then -- Update Firmware
+    if cmd == "ufw" then -- Update Firmware. Essentially stolen from https://github.com/osmarks/oc-drone/
       local web_request = interweb.request(fwaddress)
       t.send("Updating firmware...")
       t.send("  Connecting...")
