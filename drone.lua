@@ -5,8 +5,8 @@
 local fwv = "0.01"
 local d = component.proxy(component.list("drone")())
 local t = component.proxy(component.list("modem")())
-local eeprom = part "eeprom"
-local interweb = part "internet"
+local eeprom = component.proxy(component.list("eeprom")())
+local interweb = component.proxy(component.list("internet")())
 local fwaddress = "https://raw.githubusercontent.com/DremOSDeveloperTeam/opencomputers-drone/master/drone.lua"
 local commport = 6500
 
