@@ -12,7 +12,7 @@ local fwaddress = "https://raw.githubusercontent.com/DremOSDeveloperTeam/opencom
 local commport = 6500
 local idle_color = 0xFF00FF
 local cmdrec_color = 0xFFFFFF
-local cmdacc_color = 0x0000FF
+local cmdacc_color = 0xFFFFFF
 
 t.open(6500)
 
