@@ -1,8 +1,8 @@
 -- Based off https://oc.cil.li/topic/1570-drone-controll-bios/
 -- Modified by enthusiasticGeek to give the drone inventory capabilities, as well as the ability to update itself without disassembly.
--- Version 0.01
+-- Version 0.02
 
-local fwv = "0.01"
+local fwv = "0.02"
 local d = component.proxy(component.list("drone")())
 local t = component.proxy(component.list("modem")())
 local eeprom = component.proxy(component.list("eeprom")())
@@ -10,15 +10,18 @@ local interweb = component.proxy(component.list("internet")())
 local str = string
 local fwaddress = "https://raw.githubusercontent.com/DremOSDeveloperTeam/opencomputers-drone/master/drone.lua"
 local commport = 6500
+local idle_color = 0xFF00FF
+local cmdrec_color = 0xFFFFFF
+local cmdacc_color = 0x0000FF
 
 t.open(6500)
 
 while true do
-  d.setLightColor(0x0000FF)
+  d.setLightColor(idle_color)
   local evt,_,sender,port,_,name,cmd,a,b,c = computer.pullSignal()
-  d.setLightColor(0xFFFFFF)
+  d.setLightColor(cmdrec_color)
   if evt == "modem_message" and name == d.name() then
-    d.setLightColor(0xFF00FF)
+    d.setLightColor(cmdacc_color)
     if cmd == "gfw" then -- Get Firmware Version
       t.broadcast(commport, fwv)
     end
@@ -73,7 +76,17 @@ while true do
       t.broadcast(commport, d.name(),"glc",d.getLightColor())
     end
     if cmd == "slc" then -- Set Light Color (RGB is important!)
-      d.setLightColor(a)
+      if b ~= nil and b ~= '' then
+        if b == "0" then
+          idle_color = a
+        end
+        if b == "1" then
+          cmdrec_color = a
+        end
+        if b == "2" then
+          cmdacc_color = a
+        end
+      end
     end
     if cmd == "eif" then -- External Inventory Find (Instead of detect)
       local b, s = d.detect(a)
