@@ -12,6 +12,10 @@ local cmdacc_color = 0xFFFFFF
 
 t.open(6500)
 
+sendMsg(msg)
+  t.broadcast(commport,d.name(),"up",msg)
+end
+
 while true do
   d.setLightColor(idle_color)
   local evt,_,sender,port,_,name,cmd,a,b,c = computer.pullSignal()
@@ -23,11 +27,11 @@ while true do
     end
     if cmd == "ufw" then -- Update Firmware.
       local web_request = interweb.request(fwaddress)
-      t.broadcast(commport, "Updating firmware...")
-      t.broadcast(commport, "  Connecting...")
+      sendMsg("Updating firmware...")
+      sendMsg("  Connecting...")
       web_request.finishConnect()
-      t.broadcast(commport, "  Connected!")
-      t.broadcast(commport, "  Downloading new firmware...")
+      sendMsg("  Connected!")
+      sendMsg("  Downloading new firmware...")
       local full_response = ""
       while true do
         local chunk = web_request.read()
@@ -38,20 +42,20 @@ while true do
           break
         end
       end
-      t.broadcast(commport, "  Firmware file downloaded!")
-      t.broadcast(commport, "  Flashing new firmware...")
+      sendMsg("  Firmware file downloaded!")
+      sendMsg("  Flashing new firmware...")
       eeprom.set(full_response)
-      t.broadcast(commport, "  Done flashing firmware!")
-      t.broadcast(commport, "Update process done! Please reboot the drone for changes to take effect.")
+      sendMsg("  Done flashing firmware!")
+      sendMsg("Update process done! Please reboot the drone for changes to take effect.")
     end
     if cmd == "gst" then -- Get Status Text
-      t.broadcast(commport, d.name(),"up",d.getStatusText())
+      sendMsg(d.getStatusText())
     end
     if cmd == "sst" then -- Set Status Text
-      t.broadcast(commport, d.name(),"up",d.setStatusText(a))
+      sendMsg(d.setStatusText(a))
     end
     if cmd == "gpn" then -- Get Port Number
-      t.broadcast(commport, d.name(),"up",commport)
+      sendMsg(commport)
     end
     if cmd == "spn" then -- Set Port Number
       if a ~= nil and a ~= '' then
@@ -62,22 +66,22 @@ while true do
       d.move(a,b,c)
     end
     if cmd == "gos" then -- Get OffSet
-      t.broadcast(commport, d.name(),"up",d.getOffset())
+      sendMsg(d.getOffset())
     end
     if cmd == "gve" then -- Get VElocity
-      t.broadcast(commport, d.name(),"up",d.getVelocity())
+      sendMsg(d.getVelocity())
     end
     if cmd == "gmv" then -- Get Max Velocity
-      t.send(commport, d.name(),"up",d.getMaxVelocity())
+      sendMsg(d.getMaxVelocity())
     end
     if cmd == "gac" then -- Get ACceleration
-      t.broadcast(commport, d.name(),"up",d.getAcceleration())
+      sendMsg(d.getAcceleration())
     end
     if cmd == "sac" then -- Set ACceleration
       d.setAcceleration(a)
     end
     if cmd == "glc" then -- Get Light Color
-      t.broadcast(commport, d.name(),"up",d.getLightColor())
+      sendMsg(d.getLightColor())
     end
     if cmd == "slc" then -- Set Light Color (RGB is important!)
       if b ~= nil and b ~= '' then
@@ -94,31 +98,32 @@ while true do
     end
     if cmd == "eif" then -- External Inventory Find
       local b, s = d.detect(a)
-      t.broadcast(commport, d.name(),"up",b,s)
+      sendMsg(b)
+      sendMsg(s)
     end
     if cmd == "eco" then -- External inventory COmpare
-      t.broadcast(commport, d.name(),"up",d.compare(a))
+      sendMsg(d.compare(a))
     end
     if cmd == "esu" then -- External inventory SUck
       o = d.suck(a, b)
-      t.broadcast(commport, d.name, "up", o)
+      sendMsg(o)
     end
     if cmd == "edr" then -- External inventory DRop
       o = d.drop(a, b)
-      t.broadcast(commport, d.name(), "up", o)
+      sendMsg(o)
     end
     if cmd == "igs" then -- Internal inventory Get Slot
-      t.broadcast(commport, d.name(), "up", d.select())
+      sendMsg(d.select())
     end
     if cmd == "iss" then -- Internal inventory Set Slot
       o = d.select(a)
-      --t.broadcast(commport, d.name(), "up", o)
+      sendMsg(o)
     end
     if cmd == "gis" then -- Get Inventory Size
-      t.broadcast(commport, d.name(), "up", d.inventorySize())
+      sendMsg(d.inventorySize())
     end
     if cmd == "gsr" then -- Get Slot space Remaining
-      t.broadcast(commport, d.name(), "up", d.space(a))
+      sendMsg(d.space(a))
     end
   end
 end
