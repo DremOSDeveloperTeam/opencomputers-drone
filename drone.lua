@@ -1,7 +1,3 @@
--- Based off https://oc.cil.li/topic/1570-drone-controll-bios/
--- Modified by enthusiasticGeek to give the drone inventory capabilities, as well as the ability to update itself without disassembly.
--- Version 0.02
-
 local fwv = "0.02"
 local d = component.proxy(component.list("drone")())
 local t = component.proxy(component.list("modem")())
@@ -25,7 +21,7 @@ while true do
     if cmd == "gfw" then -- Get Firmware Version
       t.broadcast(commport, fwv)
     end
-    if cmd == "ufw" then -- Update Firmware. Essentially stolen from https://github.com/osmarks/oc-drone/
+    if cmd == "ufw" then -- Update Firmware.
       local web_request = interweb.request(fwaddress)
       t.broadcast(commport, "Updating firmware...")
       t.broadcast(commport, "  Connecting...")
@@ -96,7 +92,7 @@ while true do
         end
       end
     end
-    if cmd == "eif" then -- External Inventory Find (Instead of detect)
+    if cmd == "eif" then -- External Inventory Find
       local b, s = d.detect(a)
       t.broadcast(commport, d.name(),"up",b,s)
     end
