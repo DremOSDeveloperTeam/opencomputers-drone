@@ -12,7 +12,7 @@ local cmdacc_color = 0xFFFFFF
 
 t.open(6500)
 
-sendMsg(msg)
+function sendMsg(msg)
   t.broadcast(commport,d.name(),"up",msg)
 end
 
@@ -23,7 +23,7 @@ while true do
   if evt == "modem_message" and name == d.name() then
     d.setLightColor(cmdacc_color)
     if cmd == "gfw" then -- Get Firmware Version
-      t.broadcast(commport, fwv)
+      sendMsg(fwv)
     end
     if cmd == "ufw" then -- Update Firmware.
       local web_request = interweb.request(fwaddress)
