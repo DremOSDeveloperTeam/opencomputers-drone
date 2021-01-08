@@ -46,7 +46,7 @@ while true do
       sendMsg("  Flashing new firmware...")
       eeprom.set(full_response)
       sendMsg("  Done flashing firmware!")
-      sendMsg("Update process done! Please reboot the drone for changes to take effect.")
+      sendMsg("Update process done!")
     end
     if cmd == "gst" then -- Get Status Text
       sendMsg(d.getStatusText())
